@@ -1,0 +1,396 @@
+<!doctype html> 
+<html lang="en"> 
+    <head> 
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Level 3</title>
+        <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- CSS code for the appearance of the page, including the colour scheme and positioning of elements -->
+        <style type="text/css">
+            body {
+                margin: 0;
+                background-color: #ffd5a1;
+            }
+
+            /* CSS code for the menu */
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                right: 0;
+                background-color: #111;
+                overflow-x: hidden;
+                transition: 0.5s;
+                padding-top: 60px;
+            }
+
+            .sidenav a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: white;
+                display: block;
+                transition: 0.3s;
+            }
+
+            .sidenav a.active {
+                background-color: #548e94;
+                color: white;
+            }
+
+            .sidenav a:hover {
+                color: #e5987e;
+            }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+            @media screen and (max-height: 450px) {
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- menu -->
+        <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="water.html">Profile</a>
+                <a href="days.html">Input</a>
+                <a class="active" href="levels.html">Game</a>
+        </div>
+              
+        <span style="font-size:30px;cursor:pointer;float:right;margin: 10px;" onclick="openNav()">&#9776; menu</span>
+
+        <!-- code for the help and pause buttons -->
+        <i class="glyphicon glyphicon-question-sign" style="font-size:24px;float:right;margin-top:19px;margin-right:28px;" onclick="helpButton()"></i> 
+        
+        <i class="glyphicon glyphicon-pause" style="font-size:24px;float:right;margin-top:19px;margin-right:34px;" onclick="pauseButton()"></i> 
+
+        <script type="text/javascript">
+
+            // javascript functions to open/close menu, and use help and pause buttons
+            function openNav() {    
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function helpButton() {
+                alert("Use the arrow keys to collect all the coins before the times run out! \nAlso defeat all the monsters by colliding with them!");
+            }
+
+            function pauseButton() {
+                alert("Game paused");
+            }
+
+            // Phaser game - inspiration and base code from 10 part tutorial on official Phaser website:
+            // https://phaser.io/tutorials/making-your-first-phaser-3-game/part1
+            var config = {
+                type: Phaser.AUTO,
+                width: 1150,
+                height: 600,
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        gravity: { y: 300 },
+                        debug: false
+                    }
+                },
+                scene: {
+                    preload: preload,
+                    create: create,
+                    update: update
+                }
+            };
+
+            var player;
+            var potions;
+            var walls;
+            var cursors;
+            var score = 0;
+            var monstersDefeated = 0;
+            var scoreText;
+            var monstersText;
+            var timeText;
+            var timedEvent;
+            var gameOver = false;
+            var stopTime = 0;
+            var diamonds;
+            var coins;
+            var monsters;
+
+            // get data from other parts of the app regarding how much water the user should consume and how much water they have consumed
+
+            var totalWater = localStorage.getItem("totalWater");  //fraction of cups of pure water consumed
+            var waterRec = localStorage.getItem("waterRec"); //number of cups of water that should be consumed
+
+            var waterFlag = 0;
+
+            if(totalWater >= (0.8 * waterRec)) {
+                waterFlag = 1; // set flag to 1 if user meets 80% of their water recommendation
+
+            }
+
+            var game = new Phaser.Game(config);
+
+            function preload ()
+            {
+                this.load.image('dungeon', 'assets/dungeon.jpg');
+                this.load.image('wall', 'assets/wall.jpg');
+                this.load.image('potion', 'assets/potion.png');
+                this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+                this.load.image('complete', 'assets/levelComplete.png');
+                this.load.image('gameOver', 'assets/gameOver.png');
+                this.load.image('diamond', 'assets/diamond.png');
+                this.load.image('coin', 'assets/coin.png');
+                this.load.spritesheet('spider', 'assets/spider.png', { frameWidth: 42, frameHeight: 32 });
+            }
+
+            function create ()
+            {
+                
+                this.add.image(400, 300, 'dungeon');
+
+                // create the platforms of the game
+
+                walls = this.physics.add.staticGroup();
+
+                walls.create(400, 700, 'wall').setScale(4.95).refreshBody().setAlpha(1.0);
+                
+                walls.create(800, 440, 'wall').setAlpha(1.0);
+                walls.create(250, 420, 'wall').setAlpha(1.0);
+                walls.create(950, 260, 'wall').setAlpha(1.0);
+
+                player = this.physics.add.sprite(100, 450, 'dude');
+
+                player.setBounce(0.2);
+                player.setCollideWorldBounds(true);
+
+                // code to specify what happens with sprite character when arrow keys are used
+
+                this.anims.create({
+                    key: 'left',
+                    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+            
+                this.anims.create({
+                    key: 'turn',
+                    frames: [ { key: 'dude', frame: 4 } ],
+                    frameRate: 20
+                });
+            
+                this.anims.create({
+                    key: 'right',
+                    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+
+                this.anims.create({
+                    key: 'crawl',
+                    frames: this.anims.generateFrameNumbers('spider', {start: 0, end: 2}),
+                    frameRate: 8,
+                });
+
+                this.anims.create({
+                    key: 'die',
+                    frames: [{key: 'spider', frames: [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3]}],
+                    frameRate: 12
+                });
+                
+
+                cursors = this.input.keyboard.createCursorKeys();
+
+                // creating coin objects and specifying their position in the game
+
+                coins = this.physics.add.group({
+                    key: 'coin',
+                    repeat: 5,
+                    setXY: { x: 232, y: 10, stepX: 150 }
+                });
+
+                coins.children.iterate(function (child) {
+
+                    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+                });
+
+                monsters = this.physics.add.group();
+
+                scoreText = this.add.text(16, 15, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+                monstersText = this.add.text(16, 55, 'Monsters Defeated: 0', { fontSize: '32px', fill: '#fff' });
+
+
+                this.physics.add.collider(player, walls);
+                this.physics.add.collider(coins, walls);
+
+                this.physics.add.collider(monsters, walls);
+
+                this.physics.add.overlap(player, coins, collectCoin, null, this);
+
+                this.physics.add.collider(player, monsters, hitMonster, null, this);
+
+                // https://phaser.discourse.group/t/countdown-timer/2471/3
+
+                console.log('create');
+
+                // deciding how much time user gets to pass the level, based on if they have met 80% of their water recommendation
+                if(waterFlag == 0) {
+                    this.initialTime = 40;
+                }
+                else {
+                    this.initialTime = 70;
+                }
+
+                // code for timer in the game
+
+                timeText = this.add.text(16, 95, 'Countdown: ' + formatTime(this.initialTime), { fontSize: '32px', fill: '#fff' });
+
+                // Each 1000 ms call onEvent
+                timedEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
+
+
+            }
+
+            function update ()
+            {
+
+                if (gameOver)
+                {
+                    return;
+                }
+
+                // setting speed and action when arrow keys are pressed
+
+                if (cursors.left.isDown)
+                {
+                    player.setVelocityX(-160);
+
+                    player.anims.play('left', true);
+                }
+                else if (cursors.right.isDown)
+                {
+                    player.setVelocityX(160);
+
+                    player.anims.play('right', true);
+                }
+                else
+                {
+                    player.setVelocityX(0);
+
+                    player.anims.play('turn');
+                }
+
+                if (cursors.up.isDown && player.body.touching.down)
+                {
+                    player.setVelocityY(-330);
+                }
+
+                // setting condition for 'game over'
+
+                if(this.initialTime == 0)
+                {
+                    this.physics.pause();
+                    player.setTint(0xff0000);
+                    timeText.setVisible(false);
+                    this.add.image(600,300, 'gameOver');
+                    gameOver = true;
+                }
+
+                // setting condition for crossing the level
+
+                if(score == 60 && monstersDefeated == 5)
+                {
+                    this.physics.pause();
+                    timeText.setVisible(false);
+                    player.setVisible(false);
+                    this.add.image(600, 300, 'complete');
+                    
+                    localStorage.setItem("highest-level", 3); // store information that level 3 has been crossed
+
+                    gameOver = true;
+
+                }
+            }
+
+            // function specifying what happens when user collects the coin 
+            function collectCoin (player, coin)
+            {
+                coin.disableBody(true, true); // coin object disappears once collected
+
+                score += 10;
+                scoreText.setText('Score: ' + score);
+
+                // when coins collected, monsters appear
+                if (coins.countActive(true) > 0)
+                {
+                
+                    var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+                    var monster = monsters.create(x, 4, 'spider');
+                    monster.setBounce(0.9);
+                    monster.setCollideWorldBounds(true);
+                    monster.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                    monster.allowGravity = true;
+
+                }
+            
+                
+            }
+
+            // function specifying what happens when sprite character collides with monster
+            function hitMonster (player, monster)
+            {
+                // concept of defeating monsters from: https://mozdevs.github.io/html5-games-workshop/en/guides/platformer/death/
+                if(player.body.velocity.y > 0)
+                {
+                    
+                    const BOUNCE_SPEED = 200;
+                    player.setVelocityY(-BOUNCE_SPEED); // sprite character bounces
+                    monster.destroy();
+                    monstersDefeated += 1;
+                    monstersText.setText('Monsters Defeated: ' + monstersDefeated);  // display the number of monsters defeated
+                } 
+            }
+
+
+
+            function formatTime(seconds)
+            {
+                // Minutes
+                var minutes = Math.floor(seconds/60);
+                // Seconds 
+                var partInSeconds = seconds%60;
+                // Adds left zeros to seconds
+                partInSeconds = partInSeconds.toString().padStart(2,'0');
+                // Returns formated time
+                return `${minutes}:${partInSeconds}`;
+            }
+
+
+            function onEvent ()
+            {
+                this.initialTime -= 1; // One second
+                timeText.setText('Countdown: ' + formatTime(this.initialTime));
+            }
+
+        </script>
+    </body>
+
+</html>

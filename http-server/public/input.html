@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input</title>
+
+    <!-- CSS code for the appearance of the page, including the colour scheme and positioning of elements -->
+
+    <!-- inspiration for css image grid from: https://www.w3schools.com/howto/howto_js_image_grid.asp -->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #ffd5a1;
+      }
+
+      h1 { 
+        color: #00546f;
+        margin-left: 40px;
+        margin-top: 70px;
+      } 
+
+      h2 { 
+        color: #00546f;
+        margin-left: 40px;
+      } 
+
+      .header {
+        text-align: center;
+        padding: 32px;
+      }
+
+      .row {
+        display: -ms-flexbox; 
+        display: flex;
+        -ms-flex-wrap: wrap; 
+        flex-wrap: wrap;
+        padding: 0 4px;
+      }
+
+
+      .column {
+        -ms-flex: 50%; 
+        flex: 50%;
+        padding: 2px 4px;
+        
+      }
+
+      .column img {
+        margin-top: 8px;
+        vertical-align: middle;
+      }
+
+      /* Style the buttons */
+      .btn {
+        border: none;
+        outline: none;
+        padding: 10px 16px;
+        background-color: #7e9199;
+        cursor: pointer;
+        font-size: 18px;
+        width: 30%;
+        margin-top: 130px;  
+        margin-left: 32px;
+        border-radius: 18px;
+      }
+
+      .btn:hover {
+        background-color: #bec8cc;
+      }
+
+      .btn.active {
+        background-color: #666;
+        color: white;
+      }
+
+      /* css code for the text in the buttons (e.g. tea, coffee, 1 cup(s), etc. */
+
+      .fixed {  
+        position: absolute;
+        top: 210px;
+        left: -50px;
+        width: 300px;
+      }
+
+      .fixed_1 {
+        position: absolute;
+        top: 210px;
+        left: 260px;
+        width: 300px;
+      }
+
+      .fixed2 {
+        position: absolute;
+        top: 210px;
+        left: 420px;
+        width: 300px;
+      }
+
+      .fixed_2 {
+        position: absolute;
+        top: 210px;
+        left: 730px;
+        width: 300px;
+      }
+
+      .fixed3 {
+        position: absolute;
+        top: 210px;
+        left: 890px;
+        width: 300px;
+      }
+
+      .fixed_3 {
+        position: absolute;
+        top: 210px;
+        left: 1190px;
+        width: 300px;
+      }
+
+      .fixed4 {
+        position: absolute;
+        top: 510px;
+        left: -50px;
+        width: 300px;
+      }
+
+      .fixed_4 {
+        position: absolute;
+        top: 510px;
+        left: 260px;
+        width: 300px;
+      }
+
+      .fixed5 {
+        position: absolute;
+        top: 510px;
+        left: 420px;
+        width: 300px;
+      }
+
+      .fixed_5 {
+        position: absolute;
+        top: 510px;
+        left: 730px;
+        width: 300px;
+      }
+
+      .fixed6 {
+        position: absolute;
+        top: 510px;
+        left: 890px;
+        width: 300px;
+      }
+
+      .fixed_6 {
+        position: absolute;
+        top: 510px;
+        left: 1190px;
+        width: 300px;
+      }
+
+      /* css code for the menu */
+
+      .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a.active {
+        background-color: #548e94;
+        color: white;
+      }
+
+      .sidenav a:hover {
+        color: 		#e5987e;
+      }
+
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <span style="font-size:30px;cursor:pointer;float:top;margin-top:2px;margin-left:1310px;" onclick="openNav()">&#9776; menu</span>
+
+    <!-- beverage options displayed in rows and columns -->
+
+    <div class="row"> 
+      <div class="column">
+        <button class="btn" onclick="zero()"><img src="assets/water.png" style="width:33%;height:130px;"><div id="result" class="fixed">0 cup(s)</div><div class="fixed_1">Water</div></button>
+        <button class="btn" onclick="one()"><img src="assets/tea.png" style="width:33%"><div id="result2" class="fixed2">0 cup(s)</div><div class="fixed_2">Tea</div></button>
+        <button class="btn" onclick="two()"><img src="assets/coffee.png" style="width:33%;height:130px;"><div id="result3" class="fixed3">0 cup(s)</div><div class="fixed_3">Coffee</div></button>
+      </div>
+    </div>
+
+
+    <div class="row">
+        <div class="column">
+            <button class="btn" onclick="three()"><img src="assets/yogurt.png" style="width:33%"><div id="result4" class="fixed4">0 cup(s)</div><div class="fixed_4">Yogurt</div></button>
+            <button class="btn" onclick="four()"><img src="assets/juice.png" style="width:33%"><div id="result5" class="fixed5">0 cup(s)</div><div class="fixed_5">Juice</div></button>
+            <button class="btn" onclick="five()"><img src="assets/wine.png" style="width:65px;height:130px;"><div id="result6" class="fixed6">0 cup(s)</div><div class="fixed_6">Wine</div></button>
+        </div>
+    </div>
+
+    <h1 id="demo"></h1>
+    <h2 id="demo1"></h2>
+
+
+    <!-- menu -->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="water.html">Profile</a>
+        <a class="active" href="days.html">Input</a>
+        <a href="levels.html">Game</a>
+    </div>
+
+    <script>
+
+      // javascript functions to open/close menu
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+      var index;
+      var multipliers = [1.0, 0.95, 0.9, 0.85, 0.92, -0.2]; // multipliers for various beverages to calculate the water content
+      var multiplier;
+      var totalWater = 0; // totalWater variable used to store the actual amount of water consumed from all the beverages
+
+      var txt;
+      var cups;
+
+      // variables to keep track of the number of times each beverage button is clicked
+      var countOfClicks_water = 0;
+      var countOfClicks_tea = 0;
+      var countOfClicks_coffee = 0;  
+      var countOfClicks_yogurt = 0;
+      var countOfClicks_juice = 0;
+      var countOfClicks_wine = 0;
+
+      var waterRec = localStorage.getItem("waterRec");
+
+      // function that specifies what happens when first beverage (water) is clicked
+      function zero() {
+        index = 0;
+        multiplier = multipliers[index]; // get the appropriate multiplier from the array
+
+        // JavaScript prompt adapted from: https://www.w3schools.com/jsref/met_win_prompt.asp
+
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups); // accumulate the amount of water consumed
+        }
+        
+        // JavaScript localStorage property learnt from: https://www.w3schools.com/jsref/prop_win_localstorage.asp
+        localStorage.setItem("totalWater", totalWater.toFixed(2)); // store this value rounded to 2 decimal places
+        
+        countOfClicks_water = countOfClicks_water + Number(cups); // increment the number of times the water button was clicked
+        localStorage.setItem("water", countOfClicks_water); // store this value
+
+        document.getElementById("result").innerHTML = localStorage.getItem("water") + " cup(s)"; // display the number of times the water button was clicked
+
+        var percentTarget = (totalWater / waterRec) * 100;  // calculate percentage of the recommended water amount reached
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day"; // display this information to the user
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!"; // if user meets 80% of their water recommendation, let them know rewards in the game are now unlocked
+        }
+
+      }
+
+
+      // function that specifies what happens when second beverage (tea) is clicked
+      function one() {
+        index = 1;
+        multiplier = multipliers[index];
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups);
+        }
+        localStorage.setItem("totalWater", totalWater.toFixed(2));
+
+        countOfClicks_tea = countOfClicks_tea + Number(cups);
+        localStorage.setItem("tea", countOfClicks_tea);
+
+        document.getElementById("result2").innerHTML = localStorage.getItem("tea") + " cup(s)";
+
+        var percentTarget = (totalWater / waterRec) * 100;
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day";
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!";
+        }
+      }
+
+      // function that specifies what happens when third beverage (coffee) is clicked
+      function two() {
+        index = 2;
+        multiplier = multipliers[index];
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups);
+        }
+        localStorage.setItem("totalWater", totalWater.toFixed(2));
+
+        countOfClicks_coffee = countOfClicks_coffee + Number(cups);
+        localStorage.setItem("coffee", countOfClicks_coffee);
+
+        document.getElementById("result3").innerHTML = localStorage.getItem("coffee") + " cup(s)";
+        
+        var percentTarget = (totalWater / waterRec) * 100;
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day";
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!";
+        }
+      }
+
+      // function that specifies what happens when fourth beverage (yogurt) is clicked
+      function three() {
+        index = 3;
+        multiplier = multipliers[index];
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups);
+        }
+        localStorage.setItem("totalWater", totalWater.toFixed(2));
+
+        countOfClicks_yogurt = countOfClicks_yogurt + Number(cups);
+        localStorage.setItem("yogurt", countOfClicks_yogurt);
+
+        document.getElementById("result4").innerHTML = localStorage.getItem("yogurt") + " cup(s)";
+
+        var percentTarget = (totalWater / waterRec) * 100;
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day";
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!";
+        }
+      }
+
+      // function that specifies what happens when fifth beverage (juice) is clicked
+      function four() {
+        index = 4;
+        multiplier = multipliers[index];
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups);
+        }
+        localStorage.setItem("totalWater", totalWater.toFixed(2));
+
+        countOfClicks_juice = countOfClicks_juice + Number(cups);
+        localStorage.setItem("juice", countOfClicks_juice);
+
+        document.getElementById("result5").innerHTML = localStorage.getItem("juice") + " cup(s)";
+
+        var percentTarget = (totalWater / waterRec) * 100;
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day";
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!";
+        }
+      }
+
+      // function that specifies what happens when sixth beverage (wine) is clicked
+      function five() {
+        index = 5;
+        multiplier = multipliers[index];
+        cups = prompt("Please enter the number of cups:", "1");
+        if (cups == null || cups == "") {
+          txt = "User cancelled the prompt.";
+        }
+        else {
+          totalWater = totalWater + (multiplier * cups);
+        }
+        localStorage.setItem("totalWater", totalWater.toFixed(2));
+
+        countOfClicks_wine = countOfClicks_wine + Number(cups);
+        localStorage.setItem("wine", countOfClicks_wine);
+
+        document.getElementById("result6").innerHTML = localStorage.getItem("wine") + " cup(s)";
+
+        var percentTarget = (totalWater / waterRec) * 100;
+        var percentTarget = percentTarget.toFixed(2);
+        document.getElementById("demo").innerHTML="You have reached " + percentTarget + "% of your target of " + waterRec + " cups a day";
+        if(percentTarget >= 80) {
+          document.getElementById("demo1").innerHTML="Rewards Unlocked!!";
+        }
+      }
+
+    </script>
+  </body>
+
+</html>

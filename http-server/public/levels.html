@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Levels</title>
+
+    <!-- CSS code for the appearance of the page, including the colour scheme and positioning of elements -->
+    <style>
+      body {
+        background-color: #ffd5a1;
+        font-family: sans-serif;
+      }
+
+      h1 {
+        color: maroon;
+        margin-left: 40px;
+      } 
+
+      /* CSS code for the buttons */
+      /* The CSS code for buttons was adapted from: https://www.w3schools.com/css/css3_buttons.asp */
+      .btn-group .button {
+          background-color: white;
+          border: 2px solid #008CBA;
+          color: black;
+          padding: 16px 32px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 16px;
+          margin: 10px auto;
+          transition-duration: 0.4s;
+          cursor: pointer;
+          display: none;  
+          width: 80%;
+      }
+
+
+      .btn-group .button:hover {
+          background-color: #008CBA;
+          color: white;
+      }
+
+      /* CSS code for the menu */
+      .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a.active {
+        background-color: #548e94;
+        color: white;
+      }
+
+      .sidenav a:hover {  
+        color: 		#e5987e;
+      }
+
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <span style="font-size:30px;cursor:pointer;float:top;margin-top:2px;margin-left:1310px;" onclick="openNav()">&#9776; menu</span>
+
+    <!-- three buttons linking to the three levels of the game -->
+    <div class="btn-group">
+        <button class="button" id="appear1"><a href="level1.html" style="text-decoration:underline;color:black;font-size:20px;">Level 1</a></button>
+        <button class="button" id="appear2"><a href="level2.html" style="text-decoration:underline;color:black;font-size:20px;">Level 2</a></button>
+        <button class="button" id="appear3"><a href="level3.html" style="text-decoration:underline;color:black;font-size:20px;">Level 3</a></button>
+    </div>
+
+    <!-- menu -->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="water.html">Profile</a>
+        <a href="days.html">Input</a>
+        <a class = "active" href="levels.html">Game</a>
+    </div>
+    
+    <script>
+      
+      // javascript functions to open/close menu
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+      // variable to store the highest level crossed by the user
+      // concept of storing highest level reached from: http://www.thebotanistgame.com/blog/2015/08/12/saving-loading-game-state-phaserjs.html
+      var level = localStorage.getItem("highest-level");  
+    
+      // concept of using CSS display properties to hide/show buttons adapted from: https://www.w3schools.com/css/tryit.asp?filename=trycss_display
+
+      if(level == 1) {
+        document.getElementById("appear1").style.display = "block";
+        document.getElementById("appear2").style.display = "block";
+      }
+      else if(level == 2) {
+        document.getElementById("appear1").style.display = "block";
+        document.getElementById("appear2").style.display = "block";
+        document.getElementById("appear3").style.display = "block";
+      }
+      else if(level == 3) {
+        document.getElementById("appear1").style.display = "block";
+        document.getElementById("appear2").style.display = "block";
+        document.getElementById("appear3").style.display = "block";
+      }
+      else {
+        document.getElementById("appear1").style.display = "block";
+      }
+    </script>
+  </body>
+
+</html>
+

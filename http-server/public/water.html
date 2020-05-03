@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>User Profile</title>
+
+  <!-- CSS code for the appearance of the page, including the colour scheme and positioning of elements -->
+    <style>
+        body {
+        background-color: #ffd5a1;
+        font-family: sans-serif;
+        }
+
+        h1 {
+        color: maroon;
+        margin-left: 40px;
+        } 
+
+        h2 {
+        color: black;
+        margin-left: 40px;
+        } 
+
+        /* CSS code for the buttons */
+        .btn-group .button {
+            background-color: white;
+            border: 2px solid #008CBA;
+            color: black;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 20px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            display: block;
+            width: 80%;
+            align-self: center;
+            margin-left: 35px;
+            margin-bottom: 10px;
+        }
+
+
+        .btn-group .button:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+
+
+        /* CSS code for the menu */
+        /* CSS code for navigation menu adapted from: https://www.w3schools.com/howto/howto_js_sidenav.asp */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a.active {
+            background-color: #548e94;
+            color: white;
+        }
+
+        .sidenav a:hover {
+            color: #e5987e;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- menu -->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a class="active" href="water.html">Profile</a>
+        <a href="days.html">Input</a>
+        <a href="levels.html">Game</a>
+    </div>
+
+    <!-- navigation menu html code adapted from: https://www.w3schools.com/howto/howto_js_sidenav.asp -->
+    <span style="font-size:30px;cursor:pointer;float:right;margin-right:0px;margin-top:-2px;" onclick="openNav()">&#9776; menu</span>
+    
+    <script>
+
+        // javascript functions to open/close menu, adapted from: https://www.w3schools.com/howto/howto_js_sidenav.asp
+        function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        }
+
+        // function using javascript prompts to get user input
+        function promptMe() {
+            var name=prompt('Name:');
+            var age=prompt('Age:');
+            var weight=prompt('Weight (in kg):');
+
+            // algorithm to calculate water recommendation for user based on their data
+            // algorithm from this source: https://www.goodhousekeeping.com/health/diet-nutrition/a46956/how-much-water-should-i-drink/
+
+            var weightCalc = ((weight * 2.205) / 2.2);  
+            if(age < 30)
+            {
+                var water = (weightCalc * 40) / 28.3;
+            }
+
+            if(age >= 30 && age <= 55)
+            {
+                var water = (weightCalc * 35) / 28.3;
+            }
+
+            if(age > 55)
+            {
+                var water = (weightCalc * 30) / 28.3;
+            }
+            var waterRec = (water / 8).toFixed(0)  // rounding water recommendation to a whole number
+            localStorage.setItem("waterRec", waterRec);
+
+            // displaying this information on the page
+            // JavaScript innerHTML property used from: https://www.w3schools.com/jsref/prop_html_innerhtml.asp
+            document.getElementById("demo").innerHTML='Hello ' + name + ', your water recommendation is ' + waterRec + ' cups per day';
+            document.getElementById("age").innerHTML='Age: ' + age;
+            document.getElementById("weight").innerHTML='Weight: ' + weight;
+
+        }
+
+    </script>
+
+    <h1 id='demo'>Your water recommendation:</h1>
+    <div class="btn-group">
+        <button class="button" onclick="promptMe()">Enter Personal Information</button>
+    </div>
+
+    <h1>Your Profile</h1>
+    <h1 id='age'>Age: </h1>
+    <h1 id='weight'>Weight: </h1>
+
+    <h2>The algorithm for calculating the water recommendation is from <a href="https://www.goodhousekeeping.com/health/diet-nutrition/a46956/how-much-water-should-i-drink/" target="_blank" style="text-decoration:underline;color:black">this source</a></h2>
+  </body>
+</html>
+
+
+
