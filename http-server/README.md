@@ -1,3 +1,8 @@
+Below is the README file that comes with a Phaser project, and was provided when the Phaser source code files were cloned from github.
+My source files can be found in the public folder.
+Instructions on running this project can be found in the form of an installation manual in my individual project report.
+For further instructions on running the http-server required for the project - see the README file below.
+
 [![build status](https://img.shields.io/travis/http-party/http-server.svg?style=flat-square)](https://travis-ci.org/http-party/http-server)
 [![dependencies status](https://img.shields.io/david/http-party/http-server.svg?style=flat-square)](https://david-dm.org/http-party/http-server)
 [![npm](https://img.shields.io/npm/v/http-server.svg?style=flat-square)](https://www.npmjs.com/package/http-server)
